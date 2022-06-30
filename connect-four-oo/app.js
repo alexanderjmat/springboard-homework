@@ -12,7 +12,7 @@ class Game {
       this.players = [p1, p2]   
       this.HEIGHT = 6;
       this.WIDTH = 7;
-      this.currPlayer = p1;
+      this.currPlayer = this.players[0];
       this.board = [];
       this.makeBoard();
       this.makeHtmlBoard();
@@ -23,7 +23,7 @@ class Game {
         for (let y = 0; y < this.HEIGHT; y++) {
           this.board.push([]);
           for (let x = 0; x < this.WIDTH; x++) {
-            this.board[y].push(0);
+            this.board[y].push(null);
           }
         }
         console.log(this.board)
@@ -62,8 +62,17 @@ class Game {
     placeInTable(y, x) {
         const piece = document.createElement('div');
         piece.classList.add('piece');
-        piece.classList.add(`p${this.players.indexOf(this.currPlayer) + 1}`);
+        // console.log(this.players[0], this.players[1]);
+        if (this.currPlayer == this.players[0]) {
+            piece.classList.add(`p1`)
+        }
+        if (this.currPlayer == this.players[1]) {
+            piece.classList.add(`p2`)
+        }
         piece.style.top = -50 * (y + 2);
+        piece.style.backgroundColor = this.currPlayer.color;
+        console.log('placeInTable y/x coordinates: ', [y, x]);
+        console.log('');
       
         const spot = document.getElementById(`${y}-${x}`);
         spot.append(piece);
@@ -75,12 +84,23 @@ class Game {
     }
 
     findSpotForCol(x) {
-        for (let y = this.HEIGHT - 1; y >= 0; y--) {
-          if (!this.board[y][x]) {
-            return y;
-          }
+        // console.log(x);
+        // console.log(this.board[x].indexOf(this.currPlayer))
+        let y = 0;
+        if (this.board[0][x] !== null) {
+            y = null
         }
-        return null;
+        for (let i = this.board.length - 1; i >= 0; i--) {
+            if (this.board[i][x] == null) {
+                this.board[i][x] = this.players.indexOf(this.currPlayer);
+                y = i;
+                break;
+            }
+        }
+        // console.log(y)
+        console.log('findSpotForCol Y value: ', y, 'current player: ', this.currPlayer, this.board);
+        console.log('');
+        return y;
     }
 
     handleClick(evt) {
@@ -90,25 +110,26 @@ class Game {
         // get next spot in column (if none, ignore click)
         const y = this.findSpotForCol(x);
         if (y === null) {
-          return;
+          return null;
         }
       
         // place piece in board and add to HTML table
-        this.board[y][x] = this.players.indexOf(this.currPlayer) + 1;
+        this.board[y][x] = this.players.indexOf(this.currPlayer);
         this.placeInTable(y, x);
         
         // check for win
         if (this.checkForWin()) {
-          return this.endGame(`Player ${this.currPlayer} won!`);
+          return this.endGame(`Player ${this.currPlayer.color} won!`);
         }
         
         // check for tie
         if (this.board.every(row => row.every(cell => cell))) {
           return this.endGame('Tie!');
         }
+        // console.log(this.board);
           
         // switch players
-        this.currPlayer == p1 ? this.currPlayer = p2 : this.currPlayer = p1;
+        this.currPlayer == this.players[0] ? this.currPlayer = this.players[1] : this.currPlayer = this.players[0];
     }
 
     checkForWin() {
@@ -123,7 +144,7 @@ class Game {
               y < this.HEIGHT &&
               x >= 0 &&
               x < this.WIDTH &&
-              this.board[y][x] === this.currPlayer
+              this.board[y][x] === this.players.indexOf(this.currPlayer)
           );
         }
       
@@ -167,7 +188,17 @@ button.addEventListener('click', function() {
     document.querySelector('body').append(restart);
     let p1 = new Player(document.getElementById('p1').value)
     let p2 = new Player(document.getElementById('p2').value)
-    new Game(p1, p2);
+    const game = new Game(p1, p2);
+    // console.log(game);
+    // console.log(game.currPlayer);
+    // console.log(game.players[0], game.players[1]);
+    // console.log(game.board);
+    
+    // body.addEventListener('click', function() {
+    //     console.log(game);
+        // console.log(game.currPlayer);
+    //     console.log(game.board);
+    // })
 })
 
 // let p1 = new Player('green')
