@@ -6,6 +6,10 @@
   border: solid 1px #666;
 }
 
+#form {
+  display: inline-block;
+}
+
 /* pieces are div within game table cells: draw as colored circles */
 
 .piece {
