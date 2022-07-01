@@ -3,18 +3,18 @@ class Game {
       this.HEIGHT = 6;
       this.WIDTH = 7;
       this.currPlayer = 1;
+      this.board = [];
       this.makeBoard = this.makeBoard();
       this.makeHtmlBoard = this.makeHtmlBoard();
       
     }
 
     makeBoard() {
-        const board = [];
         for (let y = 0; y < this.HEIGHT; y++) {
-          board.push(Array.from({ length: this.WIDTH }));
+          this.board.push(Array.from({ length: this.WIDTH }));
         }
-        console.log(board)
-        return board;
+        console.log(this.board)
+        return this.board;
     };
 
     makeHtmlBoard() {
@@ -52,7 +52,7 @@ class Game {
         piece.classList.add(`p${this.currPlayer}`);
         piece.style.top = -50 * (y + 2);
       
-        const spot = document.getElementById(`${this.y}-${this.x}`);
+        const spot = document.getElementById(`${y}-${x}`);
         spot.append(piece);
     }
 
@@ -61,12 +61,14 @@ class Game {
     }
 
     findSpotForCol(x) {
-        for (let y = this.HEIGHT - 1; y >= 0; y--) {
-          if (!this.board[y][x]) {
-            return y;
-          }
+      console.log(this.HEIGHT - 1)
+      console.log(this);
+      for (let y = this.HEIGHT - 1; y >= 0; y--) {
+        if (!this.board[y][x]) {
+          return y;
         }
-        return null;
+      }
+      return null;
     }
 
     handleClick(evt) {
@@ -97,38 +99,38 @@ class Game {
         this.currPlayer = this.currPlayer === 1 ? 2 : 1;
     }
 
-    checkForWin() {
-        function _win(cells) {
-          // Check four cells to see if they're all color of current player
-          //  - cells: list of four (y, x) cells
-          //  - returns true if all are legal coordinates & all match currPlayer
+    // checkForWin() {
+    //     function _win(cells) {
+    //       // Check four cells to see if they're all color of current player
+    //       //  - cells: list of four (y, x) cells
+    //       //  - returns true if all are legal coordinates & all match currPlayer
       
-          return cells.every(
-            ([y, x]) =>
-              y >= 0 &&
-              y < HEIGHT &&
-              x >= 0 &&
-              x < WIDTH &&
-              board[y][x] === this.currPlayer
-          );
-        }
+    //       return cells.every(
+    //         ([y, x]) =>
+    //           y >= 0 &&
+    //           y < HEIGHT &&
+    //           x >= 0 &&
+    //           x < WIDTH &&
+    //           board[y][x] === this.currPlayer
+    //       );
+    //     }
       
-        for (let y = 0; y < HEIGHT; y++) {
-          for (let x = 0; x < WIDTH; x++) {
-            // get "check list" of 4 cells (starting here) for each of the different
-            // ways to win
-            const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-            const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-            const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-            const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      //   for (let y = 0; y < HEIGHT; y++) {
+      //     for (let x = 0; x < WIDTH; x++) {
+      //       // get "check list" of 4 cells (starting here) for each of the different
+      //       // ways to win
+      //       const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      //       const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      //       const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      //       const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
       
-            // find winner (only checking each win-possibility as needed)
-            if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
-              return true;
-            }
-          }
-        }
-      }
+      //       // find winner (only checking each win-possibility as needed)
+      //       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
+      //         return true;
+      //       }
+      //     }
+      //   }
+      // }
 }
 
 const game = new Game();
