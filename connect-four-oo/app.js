@@ -157,14 +157,17 @@ class Game {
             const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
             const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
       
-            // find winner (only checking each win-possibility as needed)
+             // find winner (only checking each win-possibility as needed)
             if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
               return true;
             }
           }
         }
-      }
+    }
 }
+    
+     
+   
 
 class Player { 
     constructor(color) {
@@ -206,4 +209,3 @@ button.addEventListener('click', function() {
 // let game = new Game(p1, p2);
 
 
-// const g = new Game((document.getElementById('p1').value, document.getElementById('p2').value));
