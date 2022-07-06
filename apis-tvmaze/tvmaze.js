@@ -4,6 +4,7 @@ const $showsList = $("#shows-list");
 const $episodesArea = $("#episodes-area");
 const $searchForm = $("#search-form");
 const show = `http://api.tvmaze.com`
+const $episodeList = $('#episodes-list')
 
 
 
@@ -19,9 +20,16 @@ async function getShowsByTerm(term) {
   // ADD: Remove placeholder & make request to TVMaze search shows API.
   const req = await axios.get(`${show}/search/shows/`, {params: {q : term}});
   const info = req.data;
-  console.log(info);
+  const showMap = info.map((value) => {
+    if (value.show.image == null) {
+      return {id : value.show.id, name : value.show.name, summary : value.show.summary, image : 'https://tinyurl.com/tv-missing'}
+    }
+    return {id : value.show.id, name : value.show.name, summary : value.show.summary, image : value.show.image.original}
+
+  })
+  console.log(showMap);
+  return showMap;
 }
-getShowsByTerm('psych');
 
 /** Given list of shows, create markup for each and to DOM */
 
@@ -33,22 +41,21 @@ function populateShows(shows) {
         `<div data-show-id="${show.id}" class="Show col-md-12 col-lg-6 mb-4">
          <div class="media">
            <img 
-              src="http://static.tvmaze.com/uploads/images/medium_portrait/160/401704.jpg" 
+              src="${show.image}" 
               alt="Bletchly Circle San Francisco" 
               class="w-25 mr-3">
            <div class="media-body">
              <h5 class="text-primary">${show.name}</h5>
              <div><small>${show.summary}</small></div>
-             <button class="btn btn-outline-light btn-sm Show-getEpisodes">
+             <button style="background-color: blue" class="btn btn-outline-light btn-sm Show-getEpisodes">
                Episodes
              </button>
            </div>
          </div>  
        </div>
       `);
-
-    $showsList.append($show);  }
-}
+    $showsList.append($show); }
+    }
 
 
 /** Handle search form submission: get shows from API and display.
@@ -56,8 +63,9 @@ function populateShows(shows) {
  */
 
 async function searchForShowAndDisplay() {
-  const term = $("#searchForm-term").val();
+  const term = $("#search-query").val();
   const shows = await getShowsByTerm(term);
+  console.log(term);
 
   $episodesArea.hide();
   populateShows(shows);
@@ -73,8 +81,30 @@ $searchForm.on("submit", async function (evt) {
  *      { id, name, season, number }
  */
 
-// async function getEpisodesOfShow(id) { }
-
+async function getEpisodesOfShow(id) { 
+  const data = await axios.get(`${show}/shows/${id}/episodes`);
+  const episodeData = data.data;
+  const episodesMap = episodeData.map((value) => {
+    return {id : value.id, name : value.name, season : value.season, number : value.number}
+  })
+  populateEpisodes(episodesMap)
+}
 /** Write a clear docstring for this function... */
 
-// function populateEpisodes(episodes) { }
+function populateEpisodes(episodes) {
+  for (let episode of episodes) {
+    let li = $(`<li>${episode.name} (season ${episode.season}, episode ${episode.number})</li>`);
+    $episodeList.append(li);
+  }
+  $episodesArea.css('display', 'block')
+}
+
+const btn = $('#shows-list');
+btn.on('click', 'button', function(e) {
+  const epi = e.target.closest('div.Show');
+  const id = epi.getAttribute('data-show-id')
+  getEpisodesOfShow(id);
+})
+    
+
+
