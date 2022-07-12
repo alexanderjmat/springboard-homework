@@ -13,3 +13,19 @@ def find_the_duplicate(nums):
         >>> find_the_duplicate([2, 1, 3, 4]) is None
         True
     """
+    freq_dict = {}
+
+
+    for num in nums:
+        if num not in freq_dict:
+            freq_dict[num] = 1
+        else:
+            freq_dict[num] += 1
+    
+    for key in freq_dict:
+        if freq_dict[key] > 1:
+            return key
+        
+    
+    return None
+

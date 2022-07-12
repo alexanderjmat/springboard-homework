@@ -9,3 +9,25 @@ def min_max_keys(d):
         >>> min_max_keys({"apple": "red", "cherry": "red", "berry": "blue"})
         ('apple', 'cherry')
     """
+    lst = [[x, d[x]] for x in d]
+    compare_1 = lst[0][0]
+    compare_2 = lst[0][0]
+    for item in lst:
+        if type(item[0]) == int:
+            if item[0] > compare_1:
+                compare_1 = item[0]
+            if item[0] < compare_2:
+                compare_2 = item[0]
+        if type(item[0]) == list or type(item[0]) == tuple or type(item[0]) == str or type(item[0]) == set:
+            if len(item[0]) > len(compare_1):
+                compare_1 = item[0]
+            if len(item[0]) < len(compare_2):
+                compare_2 = item[0]
+    
+    return (compare_2, compare_1)
+
+        
+        
+        
+        
+
