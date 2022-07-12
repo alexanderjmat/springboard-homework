@@ -10,20 +10,25 @@ def same_frequency(num1, num2):
         >>> same_frequency(1212, 2211)
         True
     """
-    num1_dict = {}
-    num2_dict = {}
+    str1 = str(num1)
+    str2 = str(num2)
+    lst1 = []
+    lst2 = []
 
-    for num in num1:
-        if num not in num1_dict:
-            num1_dict[num] = 1
-        else:
-            num1_dict[num] += 1
+    for num in str1:
+        lst1.append(int(num))
     
-    for num in num2:
-        if num not in num2_dict:
-            num2_dict[num] = 1
-        else:
-            num2_dict[num] += 1
+    for num in str2:
+        lst2.append(int(num))
+    
+    lst1.sort() 
+    lst2.sort()
+    if lst1 == lst2:
+        return True
+    
+    return False
+    
+
     
     
 
