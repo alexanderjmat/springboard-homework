@@ -9,6 +9,9 @@
 </head>
 <body>
     {% block content %}
+    <div class="start"><button id="start">Click to Start Game</button></div>
+    <p id="time"></p>
+    <section class="game">
     <table>
     {% for row in board %}
     <tr>
@@ -20,10 +23,14 @@
     {% endfor %}
     </table>
 
-    <form action="/guess" method="POST">
+    <form id="submit-guess" method="POST">
         <input type="text" name="word-guess" placeholder="Enter guess here">
-        <button type="submit">Guess!</button>
+        <button id="submit" type="submit">Guess!</button> <p id="score">Score: 0</p>
     </form>
+    <p class="err not-word">Sorry, that's not a valid word</p>
+    <p class="err not-on-board">Sorry, that word isn't on the board</p>
+    <p class="err already-selected">Sorry, that word has already been selected</p>
+    </section>
     {% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>

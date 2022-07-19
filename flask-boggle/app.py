@@ -11,31 +11,36 @@ app.debug = True
 # app.config['TESTING'] = True
 toolbar = DebugToolbarExtension(app)
 boggle_game = Boggle()
-board = boggle_game.make_board()
 
 
 @app.route('/')
 def home_page():
-    session["board"] = board
-    session.modified = True
-    return render_template("index.html", board=board)
+    board = boggle_game.make_board()
+    session['board'] = board
+    highscore = session.get('highscore', 0)
+    times_played = session.get('times played', 0)
+    return render_template("index.html", board=board, highscore=highscore, times_played=times_played)
 
-@app.route('/guess', methods=["POST"])
+@app.route('/guess')
 def guess_word():
-    # import pdb
-    # pdb.set_trace()
-    content = request.form.to_dict()
-    content = list(content.keys())
+    word = request.args['word']
+    board = session["board"]
+    check_valid_word = boggle_game.check_valid_word(board, word)
+    return jsonify({'result': check_valid_word})
 
-    word_dict = json.loads(content[0])
-    word = word_dict["word"]
-    if boggle_game.check_valid_word(board, word) == "ok":
-        response = {"result": "ok"}
-    elif boggle_game.check_valid_word(board, word) == "not-on-board":
-        response = {"result": "not-on-board"}
-    else:
-        response = {"result": "not-a-word"}
-    
-    # session["response"] = jsonify(response)
-    
+@app.route('/score', methods=["POST"])
+def score_game():
+    score = request.json['score']
+    highscore = session.get('highscore', 0)
+    session['highscore'] = max(score, highscore)
+    session['times_played'] += 1
+    session['score'] = score
     redirect('/')
+
+    return jsonify(session)
+
+    
+ 
+    
+    
+   

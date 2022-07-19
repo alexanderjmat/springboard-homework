@@ -14,3 +14,32 @@ tr {
 td {
     text-align: center;
 }
+
+form {
+    display: inline-block;
+    width: 400px
+}
+
+.not-word {
+    display: none;
+
+}
+
+#score {
+    display: inline-block;
+
+}
+
+#time {
+    display: none;
+}
+
+.not-on-board {
+    display: none;
+
+
+}
+
+.already-selected {
+    display: none;
+}
