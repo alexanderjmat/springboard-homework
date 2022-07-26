@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <img id="profile-pic" src="{{user.image_url}}" alt="">
+    <h1>{{user.first_name}} {{user.last_name}}</h1>
+    <form action="/users/{{user.id}}/edit" method="POST">
+        <input type="text" name="first_name" placeholder="First Name" required>
+        <input type="text" name="last_name" placeholder="Last Name" required>
+        <input type="text" name="image_url" placeholder="URL to Profile Picture" required>
+        <button id="save" type="submit">Save</button>
+        <a href="/users/{{user.id}}"><button id="cancel" type="button">Cancel</button></a>
+      </form>
+    
+</body>
+</html>
