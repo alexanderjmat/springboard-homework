@@ -7,7 +7,7 @@ from urllib import request
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_tests'
 app.config['SQLALCHEMY_ECHO'] = False
 
-app.config['TESTING'] = True
+# app.config['TESTING'] = True
 
 db.drop_all()
 db.create_all()
@@ -43,16 +43,11 @@ class UsersTestCase(TestCase):
 
     def test_add_user(self):
         with app.test_client() as client:
-            response = client.post('/users/new', {"first_name": "Harry", "last_name": "Potter", "image_url": "https://upload.wikimedia.org/wikipedia/en/d/d7/Harry_Potter_character_poster.jpg"})
+            response = client.post('/users/new', data={"first_name": "Harry", "last_name": "Potter", "image_url": "https://upload.wikimedia.org/wikipedia/en/d/d7/Harry_Potter_character_poster.jpg"})
 
             self.assertEqual(response.status_code, 302)
             # self.assertIn('<li>Harry Potter</li>', data)
 
-    def test_user_delete(self):
-        with app.test_client() as client:
-            response = client.post('/users/1/delete', follow_redirects=True)
-
-            self.assertEqual(response.status_code, 200)
     
     
 

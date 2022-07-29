@@ -2,7 +2,7 @@
 from flask import Flask, request, render_template,  redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from psycopg2 import connect
-from models import db, connect_db, User
+from models import db, connect_db, User, BlogPost
 
 app = Flask(__name__)
 
@@ -44,7 +44,8 @@ def redirect_user():
 @app.route('/users/<int:id>')
 def user_details(id):
     user = User.query.get_or_404(id)
-    return render_template('user_details.html', user=user)
+    posts = BlogPost.query.filter_by(posted_by=id).all()
+    return render_template('user_details.html', user=user, posts=posts)
 
 @app.route('/users/<int:id>/edit', methods=['GET', 'POST'])
 def user_edit(id):
@@ -68,6 +69,39 @@ def user_delete(id):
     db.session.commit()
     return redirect("/")
 
+@app.route('/users/<int:id>/posts', methods=['POST'])
+def create_new_post(id):
+    user = User.query.get_or_404(id)
+    post_title = request.form['post-title']
+    post_content = request.form['post-content']
+    new_post = BlogPost(title=post_title, content=post_content, posted_by=id)
+    db.session.add(new_post)
+    db.session.commit()
+    return render_template('post.html', user=user, post=new_post)
+
+@app.route('/posts/<int:id>/delete', methods=['POST'])
+def delete_post(id):
+    import pdb
+    post = BlogPost.query.get_or_404(id)
+    db.session.delete(post)
+    db.session.flush()
+    db.session.commit()
+    return redirect(f"/users/{post.posted_by}")
+
+@app.route('/posts/<int:id>/edit', methods=['GET', 'POST'])
+def edit_post(id):
+    post = BlogPost.query.get_or_404(id)
+    user = User.query.get_or_404(post.posted_by)
+
+    if request.method == "GET":
+        return render_template('edit_post.html', user=user, post=post)
+    
+    elif request.method == "POST":
+        title = request.form['post-title']
+        content = request.form['post-content']
+        post.query.filter_by(id=id).update({"title": title, "content": content})
+        db.session.commit()
+        return redirect(f"/users/{post.posted_by}")
 
     
 

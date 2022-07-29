@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/static/style.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous"> -->
+
 </head>
 <body>
     <img id="profile-pic" src="{{user.image_url}}" alt="">
@@ -13,9 +15,29 @@
     <a href="/users/{{user.id}}/edit"><button id="edit">Edit</button></a>
     <form id="delete-form" action="/users/{{user.id}}/delete" method="POST"><button id="delete">Delete</button>
     </form>
-
-
     <a href="/">Go Back</a>
-    
+
+
+    <form action="/users/{{user.id}}/posts" method="POST">
+        <h2>Add a post for {{user.first_name}} {{user.last_name}}</h2>
+        <label for="post-title">Title</label>
+        <input type="text" id="post-title" name="post-title">
+        <label for="post-content">Content</label>
+        <input type="text" id="post-content" name="post-content">
+
+        <button id="save-post" type="submit">Save</button>
+        <a href="/users/{{user.id}}"><button id="cancel-post" type="button">Cancel</button></a>
+    </form>
+
+    {% for post in posts %}
+        <article class="user-post" id="{{user.id}}-{{user.first_name}}-post-{{post.id}}">
+            <h1>{{post.title}}</h1>
+            <p>{{post.content}}</p>
+            <footer><i>Posted by {{user.first_name}} {{user.last_name}}</i></footer>
+            <a href="/posts/{{post.id}}/edit"><button id="edit">Edit</button></a>
+            <form id="delete-post" action="/posts/{{post.id}}/edit" method="POST"><button id="delete">Delete</button>
+            </form>
+        </article>
+    {% endfor %}    
 </body>
 </html>
