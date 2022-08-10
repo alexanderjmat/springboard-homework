@@ -2,7 +2,7 @@
 from flask import Flask, request, render_template,  redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from psycopg2 import connect
-from models import db, connect_db, User, BlogPost
+from models import db, connect_db, User, BlogPost, PostTag, Tag
 
 app = Flask(__name__)
 
@@ -45,7 +45,8 @@ def redirect_user():
 def user_details(id):
     user = User.query.get_or_404(id)
     posts = BlogPost.query.filter_by(posted_by=id).all()
-    return render_template('user_details.html', user=user, posts=posts)
+    tags = Tag.query.all()
+    return render_template('user_details.html', user=user, posts=posts, tags=tags)
 
 @app.route('/users/<int:id>/edit', methods=['GET', 'POST'])
 def user_edit(id):
@@ -71,12 +72,18 @@ def user_delete(id):
 
 @app.route('/users/<int:id>/posts', methods=['POST'])
 def create_new_post(id):
+    import pdb
     user = User.query.get_or_404(id)
     post_title = request.form['post-title']
     post_content = request.form['post-content']
+    tags = request.form.getlist('check')
     new_post = BlogPost(title=post_title, content=post_content, posted_by=id)
     db.session.add(new_post)
     db.session.commit()
+    for tag in tags:
+        new_posttag = PostTag(post_id=new_post.id, tag_id=tag)
+        db.session.add(new_posttag)
+        db.session.commit()
     return render_template('post.html', user=user, post=new_post)
 
 @app.route('/posts/<int:id>/delete', methods=['POST'])
@@ -103,7 +110,23 @@ def edit_post(id):
         db.session.commit()
         return redirect(f"/users/{post.posted_by}")
 
-    
+@app.route('/tags')
+def tags():
+    import pdb
+    # pdb.set_trace()
+    tag_list = Tag.query.all()
+    return render_template('tag_list.html', tags=tag_list)
+
+@app.route('/tags/<name>')
+def posts_by_tag(name):
+    import pdb
+    relevant_posts = []
+    posts = BlogPost.query.all()
+    for post in posts:
+        for assignment in post.assignment:
+            if assignment.tag_id == name:
+                relevant_posts.append(post)
+    return render_template("posts_by_tag.html", posts=relevant_posts, name=name)
 
 
 

@@ -33,8 +33,35 @@ class BlogPost(db.Model):
     created_at = db.Column(db.Text, default=datetime.datetime.now())
     posted_by = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', backref='blog_posts')
+    post_tags = db.relationship('Tag', secondary='post_tags', backref='blog_posts')
+    assignment = db.relationship('PostTag', backref='blog_posts')
 
     def __repr__(self):
         p = self
         return f"Post —— Title: {p.title} | Content: {p.content} | Posted At: {p.created_at}"
+
+class Tag(db.Model):
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(20), nullable=False, unique=True)
+    assignment = db.relationship('PostTag', backref='tags')
+
+
+    def __repr__(self):
+        t = self
+        return f"Tag —— Name: {t.name}"
+
+class PostTag(db.Model):
+
+    __tablename__ = "post_tags"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'), primary_key=True)
+    tag_id = db.Column(db.Text, db.ForeignKey('tags.name'), primary_key=True)
+
+    def __repr__(self):
+        pt = self
+        return f"PostTag —— Post Id: {pt.post_id} | Tag Id: {pt.tag_id}"
     

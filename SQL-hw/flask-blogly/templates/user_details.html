@@ -24,6 +24,9 @@
         <input type="text" id="post-title" name="post-title">
         <label for="post-content">Content</label>
         <input type="text" id="post-content" name="post-content">
+        {% for tag in tags %}
+        <label for="check">{{tag.name}}</label><input type="checkbox" name="check" value="{{tag.name}}">
+        {% endfor %}
 
         <button id="save-post" type="submit">Save</button>
         <a href="/users/{{user.id}}"><button id="cancel-post" type="button">Cancel</button></a>
@@ -34,8 +37,13 @@
             <h1>{{post.title}}</h1>
             <p>{{post.content}}</p>
             <footer><i>Posted by {{user.first_name}} {{user.last_name}}</i></footer>
+            <footer> <b>Tags:</b>
+                {% for tag in post.post_tags %}
+                    <a href="/tags/{{tag.name}}"><button>{{tag.name}}</button></a>
+                {% endfor %}
+            </footer>
             <a href="/posts/{{post.id}}/edit"><button id="edit">Edit</button></a>
-            <form id="delete-post" action="/posts/{{post.id}}/edit" method="POST"><button id="delete">Delete</button>
+            <form id="delete-post" action="/posts/{{post.id}}/delete" method="POST"><button id="delete">Delete</button>
             </form>
         </article>
     {% endfor %}    
