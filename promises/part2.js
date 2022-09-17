@@ -37,7 +37,6 @@ button.addEventListener('click', function() {
     axios.get(`${cardsAPI}${deck_id_1}/draw/?count=1`).then(data => {
         let image = new Image()
         image.src = `${data.data.cards[0].images.png}`
-        let $card = $(`<img src="">`)
         $('.cards').append(image)
     })
 
