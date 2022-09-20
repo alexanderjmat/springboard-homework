@@ -1,4 +1,5 @@
 /** Textual markov chain generator */
+const { default: generate } = require('@babel/generator');
 
 
 class MarkovMachine {
@@ -36,8 +37,10 @@ class MarkovMachine {
         markovChain[i].splice(markovChain[i].indexOf(undefined), 1)
         markovChain[i].push(null)
       }
+      markovChain[i] = [...new Set(markovChain[i])]
     }
     return markovChain;
+
 }
   
 
@@ -49,24 +52,25 @@ class MarkovMachine {
     const wordChain = this.makeChains()
     const keys = Object.keys(wordChain)
     let randomKey = keys[Math.round(Math.random() * (keys.length - 1))]
-    resultArr.push(randomKey)
-    for (let i = 1; i <= numWords; i++) {
-      let nextWord = wordChain[randomKey][Math.round(Math.random() * (randomKey.length - 1))]
-      if (nextWord == null) {
-        resultArr.push('.')
-        nextWord = wordChain[randomKey][Math.round(Math.random() * (randomKey.length - 1))]
-        resultArr.push(nextWord)
-
+    for (let i = 0; i < numWords; i++) {
+      randomKey = wordChain[randomKey][Math.round(Math.random() * (wordChain[randomKey].length - 1))]
+      if (randomKey == null) {
+        randomKey = keys[Math.round(Math.random() * (keys.length - 1))]
+        resultArr.push(randomKey)
       }
       else {
-        resultArr.push(nextWord)
+        resultArr.push(randomKey)
       }
-
-  
     }
-    console.log(resultArr)
+    let result = resultArr.join(" ")
+    return result;
+  
   }
 }
 
-let t = new MarkovMachine("Enlightenment is man's release from his self-incurred tutelage. Tutelage is man's inability to make use of his understanding without direction from another. Self-incurred is this tutelage when its cause lies not in lack of reason but in lack of resolution and courage to use it without direction from another. Sapere aude! 'Have courage to use your own reason!'- that is the motto of enlightenment.")
-t.makeText(10)
+module.exports = {
+  MarkovMachine: MarkovMachine,
+}
+
+// let t = new MarkovMachine("All our cognition starts from the senses, goes from there to the understanding, and ends with reason, beyond which there is nothing higher to be found in us to work on the matter of intuition and bring it under the highest unity of thinking. Since I am now to give a definitiona of this supreme faculty of cognition, I find myself in some embarrassment. As in the case of the understanding, there is in the case of reason a merely formal, i.e., logical use, where reason abstracts from all content of cognition, but there is also a real use, since reason itself contains the origin of certain concepts and principles, which it derives neither from the senses nor from the understanding. The first faculty has obviously long since been defined by the logicians as that of drawing inferences mediately as distinct from immediate inferences, consequentis immedi-atis; but from this we get no insight into the second faculty, which it- self generates concepts. Now since a division of reason into a logical and a transcendental faculty occurs here, a higher concept of this source of cognition must be sought that comprehends both concepts under itself, while from the analogy with concepts of the understanding, we can expect both that the logical concept will put in our hands the key to the transcendental one and that the table of functions of the former will give us the family tree of the concepts of reason.")
+// t.makeText(30)
