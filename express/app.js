@@ -9,7 +9,13 @@ app.get('/mean?:nums', (req, res) => {
     let sum = 0
     let numbers = req.query.nums
     const arrMean = []
+    if (numbers.length == 0) {
+        return res.status(400).json('Nums are required')
+    }
     for (let num of numbers) {
+        if (num != ',' && parseInt(num) != num ) {
+            return res.status(400).json(`Inputs must be a number`)
+        }
         if (num != ',') {
             arrMean.push(parseInt(num))
         }
@@ -26,24 +32,40 @@ app.get('/mean?:nums', (req, res) => {
 
 })
 
-// app.get('/median?:nums', (req, res) => {
-//     let numbers = res.query.nums
-//     const arrMedian = []
+app.get('/median?:nums', (req, res) => {
+    let numbers = req.query.nums
+    const arrMedian = []
+    if (numbers.length == 0) {
+        return res.status(400).json('Nums are required')
+    }
 
-//     for (let num of numbers) {
-//         if (num != ',') {
-//             arrMedian.push(parseInt(num))
-//         }
-//         for (let i = 0; i < arrMedian.length; i++) {
-//             for (let j = 0; j < arrMedian.length; j++) {
+    for (let num of numbers) {
+        if (num != ',' && parseInt(num) != num ) {
+            return res.status(400).json(`Inputs must be a number`)
+        }
+        if (num != ',') {
+            arrMedian.push(parseInt(num))
+        }
+    }
+    arrMedian.sort((a, b) => a-b)
+    if (arrMedian.length % 2 == 0) {
+        let middleIndex = (arrMedian[Math.round((arrMedian.length - 1) / 2)] + arrMedian[Math.round((arrMedian.length - 2) / 2)]) / 2
+        return res.send({response: {
+            operation: 'median',
+            value: `${middleIndex}`
+        }})
 
-//             }
-            
-//         }
-//     }
+    }
+    else {
+        let middleIndex = arrMedian[(arrMedian.length - 1) / 2]
+        return res.send({response: {
+            operation: 'median',
+            value: `${middleIndex}`
+        }})
+    }
 
 
-// })
+})
 
 app.get('/mode?:nums', (req, res) => {
     let numbers = req.query.nums
@@ -51,7 +73,13 @@ app.get('/mode?:nums', (req, res) => {
     let highestNumber = 0
     let winningKey;
     const arrMode = []
+    if (numbers.length == 0) {
+        return res.status(400).json('Nums are required')
+    }
     for (let num of numbers) {
+        if (num != ',' && parseInt(num) != num ) {
+            return res.status(400).json(`Inputs must be a number`)
+        }
         if (num != ',') {
             arrMode.push(parseInt(num))
         }
@@ -65,7 +93,6 @@ app.get('/mode?:nums', (req, res) => {
         }
     }
     for (let num in counter) {
-        console.log(num)
         if (counter[num] > highestNumber) {
             highestNumber = counter[num]
         }
@@ -75,7 +102,6 @@ app.get('/mode?:nums', (req, res) => {
             winningKey = num;
         }
     }
-    console.log(counter)
     return res.send({
         response: {
             operation: 'mode',
