@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    {% block content %}
+
+    {% for msg in get_flashed_messages() %}
+        <div>{{ msg }}</div>
+    {% endfor %}
+    
+    <form class="signup" method="POST">
+        <h1 class="signup-heading">Create Account</h1>
+    
+        {{ form.hidden_tag() }}
+    
+        <section class="signup-inputs">
+        {% for field in form
+               if field.widget.input_type != 'hidden' %}
+        <p>
+          {{field.label}}
+          {{ field }}
+      
+          {% for error in field.errors %}
+          {{ error }}
+          {% endfor %}
+        </p>
+        {% endfor %}
+        </section>
+      
+        <button class="signup-submit" type="submit">Submit</button>
+      
+    </form>
+
+    {% if 'user_id' in session %} 
+    <h2>Click <a href="/logout">here</a> to logout</h2>
+    <h2>Click <a href="/secret">here</a> to see the secret page</h2>
+    {% endif %}
+
+    {% if 'user_id' not in session %} 
+    <h2>Click <a href="/login">here</a> to login</h2>
+    {% endif %}
+
+    {% endblock %}
+    
+</body>
+</html>
