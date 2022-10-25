@@ -16,7 +16,7 @@ class LinkedList {
     this.length = 0;
 
     for (let val of vals) this.push(val);
-  }
+}
 
   /** push(val): add new value to end of list. */
 
