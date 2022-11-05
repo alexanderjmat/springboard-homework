@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../db");
+const ExpressError = require("../expressError");
 
 router.get('/', async (req, res, next) => {
     try {
@@ -33,6 +34,10 @@ router.put('/:id', async (req, res, next) => {
     try {
     const id = req.params.id
     const {comp_code, amt} = req.body
+    const select = await db.query("SELECT id, comp_code FROM invoices WHERE id=$1", [req.params.id])
+    if (select.rows.length == 0) {
+      throw new ExpressError("Row not found", 404)
+    }
     const updateInvoice = await db.query('UPDATE invoices SET comp_code=$1, amt=$2 WHERE id=$3', [comp_code, amt, id]);
     return res.json({invoice: {
         id, comp_code, amt

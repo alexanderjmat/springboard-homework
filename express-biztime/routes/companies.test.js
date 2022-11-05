@@ -28,4 +28,4 @@ describe("GET /companies", function() {
       expect(response.statusCode).toEqual(200);
       expect(response.body).toEqual(testCompany.rows)
     });
-  });
+});
