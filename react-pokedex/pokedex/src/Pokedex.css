@@ -1,0 +1,9 @@
+.Pokedex {
+    display: flex;
+    width: fit-content;
+    flex-wrap: wrap;
+}
+.Pokedex:nth-child(4n) {
+    page-break-after: always; /* CSS 2.1 syntax */
+    break-after: always; /* CSS 3 syntax */
+}
