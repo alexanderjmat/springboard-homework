@@ -1,0 +1,27 @@
+.VendingMachine {
+    display: flex;
+    flex-direction: row;
+}
+
+.VendingMachine img {
+    display: flex;
+    height: 100vh;
+    width: 60vw; 
+}
+.VendingMachine ul {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    list-style-type: none;
+    border: 1px;
+    border-radius: 10px;
+    padding: 2em;
+    background-color: rgba(20, 20, 20, 50);
+}
+.VendingMachine ul li {
+    display: flex;
+    color: white;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    
+}

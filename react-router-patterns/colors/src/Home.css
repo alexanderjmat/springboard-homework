@@ -1,0 +1,19 @@
+.Home__Heading {
+    height: 30vh;
+    background-color: #333333;
+    margin-top: -1.5em;
+}
+
+.Heading__h {
+    padding-top: 2em;
+    color: white;
+}
+
+.Heading__h a {
+    color: white;
+}
+
+.Home__Body {
+    height: 70vh;
+
+}

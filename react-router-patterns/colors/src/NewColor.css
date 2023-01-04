@@ -1,0 +1,57 @@
+.NewColor {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333333;
+}
+
+.NewColor__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15em;
+    justify-content: center;
+    height: 600px;
+    width: 1200px;
+    border-radius: 20px;
+    border: 2px solid black;
+    background: linear-gradient(to right, 
+                  #ffff33, 
+                  #ffff66, 
+                  #ffff99, 
+                  #ffffcc, 
+                  #ffff00, 
+                  #ffcc00, 
+                  #ff9900, 
+                  #ff6600, 
+                  #ff3300, 
+                  #ff0000, 
+                  #cc0000, 
+                  #990000, 
+                  #660000, 
+                  #330000);
+
+}
+
+.NewColor label, input {
+    width: 300px;
+}
+
+.NewColor label {
+    margin-top: 1em;
+
+    
+}
+.NewColor input {
+    margin-top: 2em;
+
+}
+
+.NewColor__container button {
+    margin-top: 2em;
+    width: 9em;
+    height: 3em;
+    cursor: pointer;
+}
